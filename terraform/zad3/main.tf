@@ -34,7 +34,7 @@ resource "docker_container" "example-app" {
 }
 
 
-resource "docker_container" "db" {
+resource "docker_container" "ubuntu" {
   name  = "db"
   image = docker_image.postgres.image_id
   networks_advanced {
