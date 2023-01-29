@@ -16,6 +16,15 @@ resource "docker_network" "shared" {
 
 resource "docker_container" "example-app" {
   name  = "example-app"
+  build {
+    path = "${path.cwd}/../../iac-labs/example-app"
+    tag     = ["example_app:latest"]
+    build_arg = {
+      platform : "linux/amd64"
+    }
+    label = {
+      author : "student"
+    }
   image = docker_image.example_app.image_id
   networks_advanced {
     name = docker_network.shared.name
@@ -34,21 +43,11 @@ resource "docker_container" "example-app" {
 }
 
 
-resource "docker_image" "example_app" {
-  name = "example_app"
-  build {
-    path = "${path.cwd}/../../iac-labs/example-app"
-    tag     = ["example_app:latest"]
-    build_arg = {
-      platform : "linux/amd64"
-    }
-    label = {
-      author : "student"
-    }
-    env = [
-  "POSTGRES_DB=app",
-  "POSTGRES_USER=app_user",
-  "POSTGRES_PASSWORD=app_pass"
-      ]
-  }
-}
+# resource "docker_container" "db" {
+#   name  = "db"
+#   image = docker_image.postgres.image_id
+#   networks_advanced {
+#     name = docker_network.shared.name
+#   }
+#   env = []
+# }
